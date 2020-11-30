@@ -1,0 +1,18 @@
+{
+    "stacks": {
+        "main": [
+            "test",
+            "city"
+        ]
+    },
+    "notes": {
+        "test": {
+            "text": "This is a test.",
+            "done": false
+        },
+        "city": {
+            "text": "Go to Boston",
+            "done": true
+        }
+    }
+}
