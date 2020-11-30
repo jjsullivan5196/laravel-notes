@@ -1,18 +1,29 @@
 {
     "stacks": {
         "main": [
-            "test",
-            "city"
+            "x-mas",
+            "today"
+        ],
+        "work": [
+            "Groceries"
         ]
     },
     "notes": {
-        "test": {
-            "text": "This is a test.",
+        "another test": {
+            "text": "my message",
             "done": false
         },
-        "city": {
-            "text": "Go to Boston",
-            "done": true
+        "Groceries": {
+            "text": "Milk, eggs, bread",
+            "done": false
+        },
+        "x-mas": {
+            "text": "Wrap the presents",
+            "done": false
+        },
+        "today": {
+            "text": "Pickup drycleaning",
+            "done": false
         }
     }
 }

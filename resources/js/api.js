@@ -1,33 +1,45 @@
-export function notes() {
-  return fetch('/api/notes', { headers: { 'Accept': 'application/json' }})
+import produce from 'immer';
+
+const reqParams = {
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+};
+
+function fetchJson(...args) {
+  return fetch(...args)
     .then(r => r.json());
 }
 
-export function changeNote(name, { text = "", done = false}) {
-  return fetch('/api/notes', {
+export function notes() {
+  return fetchJson('/api/notes', { ...reqParams });
+}
+
+export function changeNote(name, { text = "", done = false }) {
+  return fetchJson('/api/notes', {
+    ...reqParams,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ note: { [name]: { text, done } }})
   });
 }
 
 export function removeNote(name) {
-  return fetch(`/api/notes/${name}`, { method: 'DELETE' });
+  return fetchJson(`/api/notes/${name}`, { ...reqParams, method: 'DELETE' });
 }
 
 export function stacks() {
-  return fetch('/api/stacks', { headers: { 'Accept': 'application/json' }})
-    .then(r => r.json());
+  return fetchJson('/api/stacks', { headers: { 'Accept': 'application/json' }});
 }
 
 export function changeStack(name, notes = []) {
-  return fetch('/api/stacks', {
+  return fetchJson('/api/stacks', {
+    ...reqParams,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ stack: { [name]: notes }})
   });
 }
 
 export function removeStack(name) {
-  return fetch(`/api/stacks/${name}`, { method: 'DELETE' });
+  return fetchJson(`/api/stacks/${name}`, { ...reqParams, method: 'DELETE' });
 }
