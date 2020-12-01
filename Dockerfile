@@ -10,4 +10,4 @@ RUN cp .env.example .env
 RUN php artisan key:generate
 RUN cp storage/store.json storage/app/
 
-ENTRYPOINT ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
