@@ -1,16 +1,18 @@
 import * as React from 'react';
+import Row from 'react-bootstrap/Row';
 
 import Note from './Note.jsx';
 
-export default function Stack({ stack, notes, toggle, remove }) {
+export default function Stack({ notes, toggle, remove }) {
   return (
-    <div className="stack row">
-      {stack.map(name => (<Note
-                            note={notes[name]}
-                            title={name}
-                            toggle={() => { toggle(name); }}
-                            remove={() => { remove(name); }}
-                            key={name}/>))}
-    </div>
+    <Row>
+      {notes.map(n => { return (
+        <Note
+          note={n}
+          toggle={() => { toggle(n); }}
+          remove={() => { remove(n.id); }}
+          key={n.id}/>
+      )})}
+    </Row>
   );
 }

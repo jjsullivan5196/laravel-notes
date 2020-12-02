@@ -6,39 +6,29 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-use App\Util\AppStorage;
+use App\Models\Note;
 
 class NotesController extends Controller
 {
-    function __construct(AppStorage $store)
-    {
-        $this->store = $store;
-    }
-
     public function index()
     {
-        return $this->store->value()['notes'];
+        return Note::all();
     }
 
     public function store(Request $req)
     {
         $note = $req->input('note');
+        Log::channel('stderr')->warning(json_encode($note));
+        Note::create($note);
+    }
 
-        $this->store->update(function ($data) use ($note) {
-            $notes = array_merge($data['notes'], $note);
-            return array_merge($data, [ 'notes' => $notes ]);
-        });
-
-        return $this->index();
+    public function update(Request $req, $id)
+    {
+        Note::find($id)->update($req->input('note'));
     }
 
     public function destroy($id)
     {
-        $this->store->update(function ($data) use ($id) {
-            unset($data['notes'][$id]);
-            return $data;
-        });
-
-        return $this->index();
+        Note::destroy($id);
     }
 }

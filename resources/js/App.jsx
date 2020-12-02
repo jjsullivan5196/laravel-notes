@@ -3,75 +3,117 @@ import { render } from 'react-dom';
 
 import * as API from './api.js';
 
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Form from 'react-bootstrap/Form';
+
 import Stack from './components/Stack.jsx';
 import NewPrompt from './components/NewPrompt.jsx';
 import EditPrompt from './components/EditPrompt.jsx';
+import Modal from './components/Modal.jsx';
 
 function App() {
-  const [ stacks, setStacks ] = React.useState(undefined),
-        [ notes, setNotes ] = React.useState(undefined),
+  const [ notes, setNotes ] = React.useState(undefined),
         [ mode, setMode ] = React.useState(''),
         [ current, setCurrent ] = React.useState('');
 
+  const stacks = React.useMemo(() => {
+    if(notes !== undefined) {
+      return new Set(notes.map(n => n.stack));
+    }
+    else {
+      return undefined;
+    }
+  }, [notes]);
+
+  const currentNotes = React.useMemo(() => {
+    if(notes && current) {
+      return notes.filter(n => n.stack === current);
+    }
+    else {
+      return undefined;
+    }
+  }, [notes, current]);
+
+  if(stacks && !stacks.has(current)) {
+    setCurrent(stacks.values().next().value);
+  }
+
   React.useEffect(() => {
     API.notes().then(setNotes);
-    API.stacks().then(stacks => {
-      setCurrent(Object.keys(stacks)[0]);
-      setStacks(stacks);
-    });
   }, []);
 
   return stacks && notes ? (
-    <>
-      <div className="container">
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={() => { setMode('new-note'); }}>Add Note</button>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={() => { setMode('new-stack'); }}>Create Stack</button>
+    <Container>
+      <Row>
+        <Col className="m-2">
+          <Dropdown
+            onSelect={key => { setCurrent(key); }}
+          >
+            <ButtonGroup>
+              <Button
+                variant="primary"
+                onClick={() => { setMode('new-note'); }}>
+                +
+              </Button>
+              <Dropdown.Toggle variant="secondary">
+                {current}
+              </Dropdown.Toggle>
+            </ButtonGroup>
 
-        <select
-          onChange={ev => { setCurrent(ev.target.value); }}>
-          {Object.keys(stacks).map(n => (<option value={n}>{n}</option>))}
-        </select>
+            <Dropdown.Menu >
+              {[...stacks].map(n => (<Dropdown.Item eventKey={n}>{n}</Dropdown.Item>))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
+      </Row>
 
-        <Stack
-          stack={stacks[current]}
-          notes={notes}
-          remove={name => {
-            const onStack = new Set(stacks[current]);
-            onStack.delete(name);
+      <Stack
+        notes={currentNotes}
+        remove={id => {
+          API.removeNote(id)
+            .then(() => API.notes())
+            .then(setNotes);
+        }}
+        toggle={note => {
+          API.changeNote(note.id, { done: note.done === "0" ? "1" : "0" })
+            .then(() => API.notes())
+            .then(setNotes);
+        }}/>
 
-            API.changeStack(current, Array.from(onStack)).then(setStacks)
-              .then(() => API.removeNote(name)).then(setNotes);
-          }}
-          toggle={name => {
-            const note = notes[name];
-            API.changeNote(name, { ...note, done: !note.done }).then(setNotes);
-          }}/>
+      {mode === 'new-note' ?
+       <EditPrompt
+         title="New Note"
+         close={() => { setMode(''); }}
+         submit={(note) => {
+           API.makeNote({ ...note, done: false })
+             .then(() => API.notes())
+             .then(setNotes);
 
-        {mode === 'new-stack' ?
-         <NewPrompt
-           title="New Stack"
-           close={() => { setMode(''); }}
-           submit={name => {
-             API.changeStack(name).then(setStacks);
-             setMode('');
-           }}/> : <></>}
-        {mode === 'new-note' ?
-         <EditPrompt
-           title="New Note"
-           close={() => { setMode(''); }}
-           submit={(name, text) => {
-             API.changeNote(name, { text }).then(setNotes)
-               .then(() => API.changeStack(current, [ ...stacks[current], name ] )).then(setStacks);
-             setMode('');
-           }}/> : <></>}
-      </div>
-    </>
+           setMode('');
+         }}>
+         <Form.Control
+           name="title"
+           type="text"
+           placeholder="Title"
+         />
+         <Form.Control
+           name="text"
+           type="text"
+           placeholder="Text"
+         />
+         <Form.Control
+           name="stack"
+           type="text"
+           placeholder="Stack"
+         />
+       </EditPrompt> : <></>}
+    </Container>
   ) : (<></>);
 }
 
