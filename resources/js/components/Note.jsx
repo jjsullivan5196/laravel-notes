@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export default function Note({ note, toggle, remove }) {
-  const done = note.done !== "0";
+  const done = note.done;
   
   return (
     <div className="col-5">

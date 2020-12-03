@@ -81,7 +81,7 @@ function App() {
             .then(setNotes);
         }}
         toggle={note => {
-          API.changeNote(note.id, { done: note.done === "0" ? "1" : "0" })
+          API.changeNote(note.id, { done: !note.done })
             .then(() => API.notes())
             .then(setNotes);
         }}/>
