@@ -10,6 +10,8 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import Form from 'react-bootstrap/Form';
 
 import Stack from './components/Stack.jsx';
@@ -53,12 +55,20 @@ function App() {
             onSelect={key => { setCurrent(key); }}
           >
             <ButtonGroup>
-              <Button
-                size="lg"
-                variant="primary"
-                onClick={() => { setMode('new-note'); }}>
-                +
-              </Button>
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip>
+                    <span style={{ fontSize: "20px" }}>Make a note</span>
+                  </Tooltip>}
+              >
+                <Button
+                  size="lg"
+                  variant="primary"
+                  onClick={() => { setMode('new-note'); }}>
+                  +
+                </Button>
+              </OverlayTrigger>
               {stacks.has(current) ?
                <Button
                  size="lg"
