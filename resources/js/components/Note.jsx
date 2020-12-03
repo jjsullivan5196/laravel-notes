@@ -12,6 +12,7 @@ export default function Note({ note, toggle, remove }) {
         <Card.Header>
           <Button
             style={{ display: 'inline-block' }}
+            size="sm"
             variant={done ? 'primary' : 'secondary'}
             onClick={toggle}>
             <span>{ done ? "DONE" : "TODO" }</span>
