@@ -57,11 +57,14 @@ function App() {
           >
             <ButtonGroup>
               <Button
+                size="lg"
                 variant="primary"
                 onClick={() => { setMode('new-note'); }}>
                 +
               </Button>
-              <Dropdown.Toggle variant="secondary">
+              <Dropdown.Toggle
+                variant="secondary"
+                size="lg">
                 {current}
               </Dropdown.Toggle>
             </ButtonGroup>
