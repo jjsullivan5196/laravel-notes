@@ -21,8 +21,12 @@ export default function Note({ note, toggle, remove }) {
           </button>
         </Card.Header>
         <Card.Body>
-          <h5 className="card-title">{note.title}</h5>
-          <p className="card-text">{note.text}</p>
+          <Card.Title>
+            <h5>{note.title}</h5>
+          </Card.Title>
+          <Card.Text>
+            <p>{note.text}</p>
+          </Card.Text>
         </Card.Body>
       </Card>
     </Col>

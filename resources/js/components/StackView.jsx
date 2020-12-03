@@ -31,10 +31,12 @@ export default function StackView({ notes, onClick, peek = 2 }) {
             <span>{ done ? "DONE" : "TODO" }</span>
           </Card.Header>
           <Card.Body>
-            <h5 className="card-title">{name}</h5>
-            <ul className="card-text">
-              {bullets}
-            </ul>
+            <Card.Title>
+              <h5>{name}</h5>
+            </Card.Title>
+            <Card.Text>
+              <ul>{bullets}</ul>
+            </Card.Text>
           </Card.Body>
         </Card>
       </Col>
