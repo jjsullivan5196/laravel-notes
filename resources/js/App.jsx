@@ -100,21 +100,34 @@ function App() {
 
            setMode('');
          }}>
-         <Form.Control
-           name="title"
-           type="text"
-           placeholder="Title"
-         />
-         <Form.Control
-           name="text"
-           type="text"
-           placeholder="Text"
-         />
-         <Form.Control
-           name="stack"
-           type="text"
-           placeholder="Stack"
-         />
+         <Form.Group as={Row}>
+           <Form.Label column>Title</Form.Label>
+           <Col sm="10">
+             <Form.Control
+               name="title"
+               type="text"
+             />
+           </Col>
+         </Form.Group>
+         <Form.Group as={Row}>
+           <Form.Label column>Text</Form.Label>
+           <Col sm="10">
+             <Form.Control
+               name="text"
+               type="text"
+             />
+           </Col>
+         </Form.Group>
+         <Form.Group as={Row}>
+           <Form.Label column>Stack</Form.Label>
+           <Col sm="10">
+             <Form.Control
+               name="stack"
+               type="text"
+               defaultValue={current || ""}
+             />
+           </Col>
+         </Form.Group>
        </EditPrompt> : <></>}
     </Container>
   ) : (<></>);
