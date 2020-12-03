@@ -1,5 +1,7 @@
 import * as React from 'react';
+import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Card from 'react-bootstrap/Card';
 
 export default function StackView({ notes, onClick, peek = 2 }) {
   const stacks = {};
@@ -23,19 +25,19 @@ export default function StackView({ notes, onClick, peek = 2 }) {
     }
 
     return (
-      <div className="col-5" onClick={() => { onClick(name); }}>
-        <div className="card mb-3">
-          <div className="card-header">
+      <Col xs={5} onClick={() => { onClick(name); }}>
+        <Card className="mb-3">
+          <Card.Header>
             <span>{ done ? "DONE" : "TODO" }</span>
-          </div>
-          <div className="card-body">
+          </Card.Header>
+          <Card.Body>
             <h5 className="card-title">{name}</h5>
             <ul className="card-text">
               {bullets}
             </ul>
-          </div>
-        </div>
-      </div>
+          </Card.Body>
+        </Card>
+      </Col>
     );
   })
   
