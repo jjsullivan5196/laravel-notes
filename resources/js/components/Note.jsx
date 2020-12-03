@@ -5,7 +5,7 @@ export default function Note({ note, toggle, remove }) {
   
   return (
     <div className="col-5">
-      <div className="note card">
+      <div className="note card mb-3">
         <div className="card-header">
           <button style={{ display: 'inline-block' }} className={`btn ${ done ? 'btn-primary' : 'btn-secondary'}`} onClick={toggle}>
             <span>{ done ? "DONE" : "TODO" }</span>

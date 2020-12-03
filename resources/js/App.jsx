@@ -13,14 +13,15 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Form from 'react-bootstrap/Form';
 
 import Stack from './components/Stack.jsx';
+import StackView from './components/StackView.jsx';
 import NewPrompt from './components/NewPrompt.jsx';
 import EditPrompt from './components/EditPrompt.jsx';
 import Modal from './components/Modal.jsx';
 
 function App() {
   const [ notes, setNotes ] = React.useState(undefined),
-        [ mode, setMode ] = React.useState(''),
-        [ current, setCurrent ] = React.useState('');
+        [ mode, setMode ] = React.useState(undefined),
+        [ current, setCurrent ] = React.useState(undefined);
 
   const stacks = React.useMemo(() => {
     if(notes !== undefined) {
@@ -40,10 +41,6 @@ function App() {
     }
   }, [notes, current]);
 
-  if(stacks && !stacks.has(current)) {
-    setCurrent(stacks.values().next().value);
-  }
-
   React.useEffect(() => {
     API.notes().then(setNotes);
   }, []);
@@ -62,6 +59,12 @@ function App() {
                 onClick={() => { setMode('new-note'); }}>
                 +
               </Button>
+              {stacks.has(current) ?
+               <Button
+                 size="lg"
+                 variant="info"
+                 onClick={() => { setCurrent(undefined); }}
+               >Stacks</Button> : <></>}
               <Dropdown.Toggle
                 variant="secondary"
                 size="lg">
@@ -76,29 +79,34 @@ function App() {
         </Col>
       </Row>
 
-      <Stack
-        notes={currentNotes}
-        remove={id => {
-          API.removeNote(id)
-            .then(() => API.notes())
-            .then(setNotes);
-        }}
-        toggle={note => {
-          API.changeNote(note.id, { done: !note.done })
-            .then(() => API.notes())
-            .then(setNotes);
-        }}/>
+      {stacks.has(current) ?
+       <Stack
+         notes={currentNotes}
+         remove={id => {
+           API.removeNote(id)
+             .then(() => API.notes())
+             .then(setNotes);
+         }}
+         toggle={note => {
+           API.changeNote(note.id, { done: !note.done })
+             .then(() => API.notes())
+             .then(setNotes);
+         }}/> :
+       <StackView
+         notes={notes}
+         onClick={name => { setCurrent(name); }}
+       />}
 
       {mode === 'new-note' ?
        <EditPrompt
          title="New Note"
-         close={() => { setMode(''); }}
+         close={() => { setMode(undefined); }}
          submit={(note) => {
            API.makeNote({ ...note, done: false })
              .then(() => API.notes())
              .then(setNotes);
 
-           setMode('');
+           setMode(undefined);
          }}>
          <Form.Group as={Row}>
            <Form.Label column>Title</Form.Label>
