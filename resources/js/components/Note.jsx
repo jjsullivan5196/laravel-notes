@@ -7,7 +7,7 @@ export default function Note({ note, toggle, remove }) {
   const done = note.done;
   
   return (
-    <Col xs={5}>
+    <Col xs={6}>
       <Card className="mb-3">
         <Card.Header>
           <Button

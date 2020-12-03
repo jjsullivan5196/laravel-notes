@@ -25,7 +25,7 @@ export default function StackView({ notes, onClick, peek = 2 }) {
     }
 
     return (
-      <Col xs={5} onClick={() => { onClick(name); }}>
+      <Col xs={6} onClick={() => { onClick(name); }}>
         <Card className="mb-3">
           <Card.Header>
             <span>{ done ? "DONE" : "TODO" }</span>

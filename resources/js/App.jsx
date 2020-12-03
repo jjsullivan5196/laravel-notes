@@ -48,7 +48,7 @@ function App() {
   return stacks && notes ? (
     <Container>
       <Row>
-        <Col className="m-2">
+        <Col className="mt-3 mb-3 ml-1">
           <Dropdown
             onSelect={key => { setCurrent(key); }}
           >
