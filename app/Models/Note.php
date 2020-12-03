@@ -9,5 +9,8 @@ class Note extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'done' => 'boolean'
+    ];
     protected $fillable = ['title','stack','text','done'];
 }
