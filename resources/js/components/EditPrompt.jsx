@@ -10,7 +10,8 @@ export default function EditPrompt({ title, submit, close, children }) {
       confirmText={"OK"}
       onClose={close}
       onSubmit={() => {
-        submit(new FormData(form.current));
+        const data = Object.fromEntries(new FormData(form.current));
+        submit(data);
       }}>
       <Form ref={form}>
         {children}
