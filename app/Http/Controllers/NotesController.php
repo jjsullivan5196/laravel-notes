@@ -12,7 +12,7 @@ class NotesController extends Controller
 {
     public function index()
     {
-        return Note::all();
+        return Note::orderBy('id')->get();
     }
 
     public function store(Request $req)
