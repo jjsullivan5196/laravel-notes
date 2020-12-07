@@ -1,47 +1,36 @@
 import * as React from 'react';
 import { render } from 'react-dom';
 
-import * as API from './api.js';
-
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Form from 'react-bootstrap/Form';
 
 import Stack from './components/Stack.jsx';
 import StackView from './components/StackView.jsx';
-import NewPrompt from './components/NewPrompt.jsx';
 import EditPrompt from './components/EditPrompt.jsx';
-import Modal from './components/Modal.jsx';
+
+import * as API from './api.js';
 
 function App() {
   const [ notes, setNotes ] = React.useState(undefined),
         [ mode, setMode ] = React.useState(undefined),
         [ current, setCurrent ] = React.useState(undefined);
 
-  const stacks = React.useMemo(() => {
-    if(notes !== undefined) {
-      return new Set(notes.map(n => n.stack));
-    }
-    else {
-      return undefined;
-    }
-  }, [notes]);
+  const stacks = React.useMemo(
+    () => notes && new Set(notes.map(n => n.stack)),
+    [notes]
+  );
 
-  const currentNotes = React.useMemo(() => {
-    if(notes && current) {
-      return notes.filter(n => n.stack === current);
-    }
-    else {
-      return undefined;
-    }
-  }, [notes, current]);
+  const currentNotes = React.useMemo(
+    () => notes && current ? notes.filter(n => n.stack === current) : undefined,
+    [notes, current]
+  );
 
   React.useEffect(() => {
     API.notes().then(setNotes);
